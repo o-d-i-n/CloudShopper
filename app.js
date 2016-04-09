@@ -12,6 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var admin = require('./routes/admin');
+var recommendations = require('./routes/recommendations')
 
 var app = express();
 // view engine setup
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/admin', admin);
+app.use('/recommendations', recommendations);
 // passport config
 var Account = require('./models/account');
 

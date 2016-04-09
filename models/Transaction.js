@@ -12,8 +12,8 @@ var Transaction = new Schema({
     }],
     buyerID: Schema.ObjectId,
     cost: Number,
-    date: Date,
-    merchantName: String,
+    date:  {type:Date,default:Date.now},
+    merchantID: Schema.ObjectId,
     bill: String
     // friendList: dataType
 });

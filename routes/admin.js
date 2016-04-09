@@ -49,12 +49,30 @@ router.post('/getDetails', function (req, res) {
 
 router.post('/transaction',function(req,res,next) {
     //Transaction Part Here
+    var prod = new Array();
+    var productz = new Array();
+    console.log(req.body.products)
+    prod = String(req.body.products).split('.');
+    for(i in prod) {
+        productz.push(JSON.parse(prod[i]));
+    }
 
 
-    //transaction = new Transaction({
-    //    productID = req.body.productID
-    //
-    //});
+    var transaction = new Transaction({
+        products: productz,
+        buyerID: req.body.buyerID,
+        cost: req.body.price,
+        merchantID: req.body.merchantID
+    });
+
+    transaction.save(function(err,transaction) {
+        if(err) {
+            console.log(err);
+        } else {
+            //res.json({transaction:transaction});
+            console.log(transaction);
+        }
+    });
 
     //Recommendation Engine Part Here
 
@@ -140,9 +158,9 @@ router.post('/transaction',function(req,res,next) {
 
 
     } else {
-      Female.findOne({},function(err,female) {
+      /*Female.findOne({},function(err,female) {
           //SAME STUFF HERE AS ABOVE
-      }
+      }*/
     }
 });
 

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Male = new Schema({
-    age_group: {
+    age_group: { // age groups are between 10-18,18-25 and 25 and older
       min:Number,
       max:Number,
       tags:[{
