@@ -4,6 +4,7 @@ var Catalog = require('../models/Catalog');
 var Male = require('../models/Male');
 var Female = require('../models/Female');
 var Transaction = require('../models/Transaction');
+var Merchant = require('../models/Merchant');
 var express = require('express');
 
 
@@ -86,24 +87,18 @@ router.post('/modifyProduct',auth.ensureAuthenticated,function(req,res,next) {
   });
 });
 
-router.post('/deleteProduct', auth.ensureAuthenticated, function(req, res, next){
+router.post('/deleteProduct', function(req, res, next){
 
     Catalog.findByIdAndRemove(req.body.product_id,function (err, product) {
         if (err) res.json({success:false,err:err});
         else {
-            product.remove(function (err, product) {
-                if (err) res.json({success:false,err:err});
-                else {
                     console.log('Product deleted.');
                     res.json({success:true});
                 }
             });
-        }
+        });
 
-    });
-});
-
-router.post('/listProduct', auth.ensureAuthenticated, function(req,res,next){
+router.post('/listProduct',  function(req,res,next){
 
     Catalog.find({}, function(err, product) {
         if(err) res.json({success : false, err: err});
@@ -113,6 +108,52 @@ router.post('/listProduct', auth.ensureAuthenticated, function(req,res,next){
         }
     })
 });
+
+router.post('/registerMerchant', function(req,res,next) {
+
+    merchant = new Merchant({
+        username: req.body.username,
+        password: req.body.password,
+        address: req.body.address,
+        phoneNo:req.body.phoneNo,
+        email: req.body.email,
+        Age: req.body.Age,
+        Photo: req.body.Photo,
+        location: req.body.location
+    });
+
+    merchant.save(function (err, product) {
+        if (err) res.json({success:false,err:err});
+        else
+        {
+            res.json({success:true,merchant:merchant});
+        }
+    });
+});
+
+router.post('/deleteMerchant', function(req, res, next){
+
+    Merchant.findByIdAndRemove(req.body.merchant_id,function (err, merchant) {
+        if (err || !merchant) {
+            res.json({success: false, err: err, yolo: '2'});
+        } else {
+            res.json({success: true});
+        }
+
+    });
+});
+
+router.post('/listMerchant', function(req,res,next){
+
+    Merchant.find({}, function(err, Merchant) {
+        if(err) res.json({success : false, err: err});
+        else {
+            res.json({Merchant: Merchant});
+
+        }
+    })
+});
+
 //end of user-generated responses
 
 module.exports = router;
