@@ -25,7 +25,10 @@ router.post('/addProduct',auth.ensureAuthenticated,function(req,res,next) {
 
   product.save(function (err, product) {
     if (err) res.json({success:false,err:err});
-    else res.json({success:true,product:product});
+      else
+    {
+        res.json({success:true,product:product});
+    }
   });
 
   //Recomendation Engine Part
@@ -45,6 +48,40 @@ router.post('/transaction',auth.ensureAuthenticated,function(req,res,next) {
 
       });
     }
+});
+
+router.post('/modifyProduct',auth.ensureAuthenticated,function(req,res,next) {
+
+  Catalog.findAndModify({_id : req.body.product_id},function (err, product) {
+    if (err) res.json({success:false,err:err});
+    else {
+      product.save(function (err, product) {
+        if (err) res.json({success:false,err:err});
+        else {
+            res.json({success:true,product:product});
+        }
+      });
+      res.json({success:true,product:product});
+    }
+
+  });
+});
+
+router.post('/deleteProduct', auth.ensureAuthenticated, function(req, res, next){
+
+    Catalog.deleteOne({_id : req.body.product_id},function (err, product) {
+        if (err) res.json({success:false,err:err});
+        else {
+            product.save(function (err, product) {
+                if (err) res.json({success:false,err:err});
+                else {
+                    res.json({success:true,product:product});
+                }
+            });
+            res.json({success:true,product:product});
+        }
+
+    });
 });
 
 module.exports = router;
