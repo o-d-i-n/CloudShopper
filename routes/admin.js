@@ -93,6 +93,6 @@ router.post('/deleteProduct', auth.ensureAuthenticated, function(req, res, next)
     });
 });
 
-
+//end of user-generated responses
 
 module.exports = router;
