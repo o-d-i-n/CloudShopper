@@ -3,6 +3,7 @@ var Account = require('../models/account');
 var Catalog = require('../models/Catalog');
 var Male = require('../models/Male');
 var Female = require('../models/Female');
+var Transaction = require('../models/Transaction');
 var express = require('express');
 
 
@@ -10,7 +11,8 @@ var router = express.Router();
 var auth = require('../userLogic/auth')
 
 
-router.post('/addProduct',auth.ensureAuthenticated,function(req,res,next) {
+
+router.post('/addProduct',auth.ensureAuthenticated, function(req,res,next) {
 
   product = new Catalog({
     merchant: req.body.merchant,
@@ -32,22 +34,30 @@ router.post('/addProduct',auth.ensureAuthenticated,function(req,res,next) {
   });
 
   //Recomendation Engine Part
+  //dont know why chahal added this comment
+});
 
+//getUserDetails
+router.post('/getDetails', function (req, res) {
+    Account.findById(req.body.accountID, function (err, account) {
+        if(err){
+            return res.json({success:false, error:err});
+        }
+        if(account)
+            return res.json({success:true, user:account});
+        else
+            return res.json({success:false});
+    }) ;
 });
 
 router.post('/transaction',auth.ensureAuthenticated,function(req,res,next) {
     //Transaction Part Here
 
-    //Recommendation Engine Part Here
-    if(req.body.gender == 'M') {
-      Male.findandModify({},function(err,male) {
-    
-      });
-    } else {
-      Female.findOne({},function(err,female) {
+    //transaction = new Transaction({
+    //    productID = req.body.productID
+    //
+    //});
 
-      });
-    }
 });
 
 router.post('/modifyProduct',auth.ensureAuthenticated,function(req,res,next) {
