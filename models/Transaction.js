@@ -5,16 +5,18 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Transaction = new Schema({
-    productID: [Number],
-    buyerName: String,
+    products: [{
+        productID: Number,
+        quantity: Number,
+        totalPrice: Number
+    }],
+    buyerID: Schema.ObjectId,
     cost: Number,
     date: Date,
     merchantName: String,
     bill: String
     // friendList: dataType
 });
-
-
 
 
 module.exports = mongoose.model('Transaction', Transaction);
