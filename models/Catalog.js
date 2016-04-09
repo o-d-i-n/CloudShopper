@@ -3,7 +3,6 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var passportLocalMongoose = require('passport-local-mongoose');
 
 var Catalog = new Schema({
     merchant: String, // We will refer to the product by its _id

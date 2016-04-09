@@ -1,7 +1,10 @@
 var passport = require('passport');
 var Account = require('../models/account');
 var Catalog = require('../models/Catalog');
+var Male = require('../models/Male');
+var Female = require('../models/Female');
 var express = require('express');
+
 
 var router = express.Router();
 var auth = require('../userLogic/auth')
@@ -25,6 +28,23 @@ router.post('/addProduct',auth.ensureAuthenticated,function(req,res,next) {
     else res.json({success:true,product:product});
   });
 
+  //Recomendation Engine Part
+
+});
+
+router.post('/transaction',auth.ensureAuthenticated,function(req,res,next) {
+    //Transaction Part Here
+
+    //Recommendation Engine Part Here
+    if(req.body.gender == 'M') {
+      Male.findandModify({},function(err,male) {
+    
+      });
+    } else {
+      Female.findOne({},function(err,female) {
+
+      });
+    }
 });
 
 module.exports = router;
