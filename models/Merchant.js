@@ -19,6 +19,4 @@ var Merchant = new Schema({
 
 
 
-Merchant.plugin(passportLocalMongoose);
-
 module.exports = mongoose.model('Merchant', Merchant);

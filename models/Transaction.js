@@ -17,6 +17,5 @@ var Transaction = new Schema({
 
 
 
-Transaction.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('Transaction', Transaction);

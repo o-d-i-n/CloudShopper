@@ -21,6 +21,4 @@ var Catalog = new Schema({
 
 
 
-Catalog.plugin(passportLocalMongoose);
-
 module.exports = mongoose.model('Catalog', Catalog);

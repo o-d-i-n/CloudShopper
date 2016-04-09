@@ -13,7 +13,7 @@ router.post('/addProduct',auth.ensureAuthenticated,function(req,res,next) {
     merchant: req.body.merchant_id,
     tags: req.body.tags,
     price: req.body.price,
-    quantity: {amount:req.body.quantity,default:0},
+    quantity: req.body.quantity,
     discount: req.body.discount, // In percrntages
     gender: req.body.gender, // M / F / U (Unisex)
     brand: req.body.brand,
@@ -22,7 +22,7 @@ router.post('/addProduct',auth.ensureAuthenticated,function(req,res,next) {
 
   product.save(function (err, product) {
     if (err) res.json({success:false,err:err});
-    res.json({success:true,product:product});
+    else res.json({success:true,product:product});
   });
 
 });

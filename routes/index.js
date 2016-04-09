@@ -15,20 +15,15 @@ router.get('/register',function(req,res,next) {
 });
 
 router.post('/register',function(req,res,next) {
-  var email = req.body.email;
-  var password = req.body.password;
 
   Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
         if (err) {
-            console.log(err)
-            return res.render('register', { account : account });
+            return res.json({ error: err});
         }
-
-        passport.authenticate('local')(req, res, function () {
-            res.render('/',{ title: 'Express' });
-        });
+        else {
+            return res.json({status:'success', user:account });
+        }
     });
-
 });
 
 router.get('/login', function(req, res) {
