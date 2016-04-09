@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/register',function(req,res,next) {
-    res.json({register: 'Welcome! you landed on the register page'});
+    res.render('register');
 });
 
 router.post('/register',function(req,res,next) {
@@ -53,9 +53,9 @@ router.post('/addDetails', function(req, res, next) {
 });
 
 
-//router.get('/login', function(req, res) {
-//    res.json({user: req.user, status:'if user displayed, logged in, else log in'});
-//});
+router.get('/login', function(req, res) {
+    res.render('login');
+});
 
 router.post('/login', passport.authenticate('local'),function(req,res) {
         return res.json({success:true, user:req.user});

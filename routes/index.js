@@ -1,4 +1,3 @@
-
 var passport = require('passport');
 var Account = require('../models/account');
 var express = require('express');
@@ -7,7 +6,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    res.json({ user : req.user , status:'Home page! user if logged in!!'});
+    res.render('index', { user : req.user , status:'Home page! user if logged in!!'});
 });
 
 
