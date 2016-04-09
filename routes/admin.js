@@ -12,13 +12,19 @@ router.post('/addProduct',auth.ensureAuthenticated,function(req,res,next) {
   product = new Catalog({
     merchant: req.body.merchant_id,
     tags: req.body.tags,
-    dateAdded: Date.today(),
     price: req.body.price,
     quantity: {amount:req.body.quantity,default:0},
-    discount: req.body.discount // In percrntages
-    gender: req.body., // M / F / U (Unisex)
-    brand: String,
-    name: String,
-    photo: String
+    discount: req.body.discount, // In percrntages
+    gender: req.body.gender, // M / F / U (Unisex)
+    brand: req.body.brand,
+    name: req.body.name
   });
+
+  product.save(function (err, product) {
+    if (err) res.json({success:false,err:err});
+    res.json({success:true,product:product});
+  });
+
 });
+
+module.exports = router;

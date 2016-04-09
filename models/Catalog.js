@@ -11,7 +11,7 @@ var Catalog = new Schema({
     dateAdded: {type:Date,default:Date.now},
     price: Number,
     quantity: {type:Number,default:0},
-    discount: Number // In percrntages
+    discount: Number, // In percrntages
     gender: String, // M / F / U (Unisex)
     brand: String,
     name: String,

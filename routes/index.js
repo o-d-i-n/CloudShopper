@@ -2,7 +2,7 @@
 var passport = require('passport');
 var Account = require('../models/account');
 var express = require('express');
-
+var auth = require('../userLogic/auth')
 var router = express.Router();
 
 /* GET home page. */
@@ -44,7 +44,7 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-router.get('/test',ensureAuthenticated,function(req,res,next){
+router.get('/test',auth.ensureAuthenticated,function(req,res,next){
     res.render('test');
 });
 
