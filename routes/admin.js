@@ -93,6 +93,16 @@ router.post('/deleteProduct', auth.ensureAuthenticated, function(req, res, next)
     });
 });
 
+router.post('/listProduct', auth.ensureAuthenticated, function(req,res,next){
+
+    Catalog.find({}, function(err, product) {
+        if(err) res.json({success : false, err: err});
+        else {
+            res.json({product: product});
+
+        }
+    })
+});
 //end of user-generated responses
 
 module.exports = router;
