@@ -12,6 +12,12 @@ var Catalog = new Schema({
     tags: [String],
     dateAdded: Date,
     price: Number,
+    quantity: {amount:Number,default:0},
+    discount: Number // In percrntages
+    gender: String, // M / F / U (Unisex)
+    brand: String,
+    name: String,
+    photo: String
     // friendList: dataType
 });
 
