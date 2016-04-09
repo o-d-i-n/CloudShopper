@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var Account = require('../models/account');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -14,7 +15,7 @@ router.get('/register',function(req,res,next) {
 router.post('/register',function(req,res,next) {
 
     Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-        if (err) {
+        if (err || !account) {
             return res.json({ error: err});
         }
         else {
