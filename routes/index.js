@@ -7,11 +7,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    res.render('index', { user : req.user });
+    res.json({ user : req.user , status:'Home page! user if logged in!!'});
 });
 
 router.get('/register',function(req,res,next) {
-  res.render('register',{});
+  res.json({register: 'Welcome! you landed on the register page'});
 });
 
 router.post('/register',function(req,res,next) {
@@ -32,7 +32,7 @@ router.post('/register',function(req,res,next) {
 });
 
 router.get('/login', function(req, res) {
-    res.render('login', { user : req.user });
+    res.json({user: req.user, status:'if user displayed, logged in, else log in'});
 });
 
 router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), function(req, res) {
@@ -45,7 +45,7 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/test',ensureAuthenticated,function(req,res,next){
-    res.render('test');
+    res.json({test: 'test succesful'});
 });
 
 function ensureAuthenticated(req, res, next) {
