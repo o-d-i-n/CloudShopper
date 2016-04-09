@@ -66,11 +66,6 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-router.post('/recommendations',function(req,res) {
-
-
-
-});
 
 
 module.exports = router;

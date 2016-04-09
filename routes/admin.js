@@ -76,61 +76,54 @@ router.post('/transaction',function(req,res,next) {
 
     //Recommendation Engine Part Here
 
-    var min = 18;
-    var max = 25;
+    var min = getMin(req.body.age);
+    var season = seasonNorth(new Date());
+    var tags = String(req.body.tags);
 
     if(req.body.gender == 'M') {
 
-      Male.findOne({ "age_group.min":18 }, function(err, user) {
+      Male.findOne({ "age_group.min":min }, function(err, user) {
 
         if (err) {
 
             res.json({success:false,err:err});
 
         } else {
-
-                var tags = String(req.body.tags);
                 //console.log(req.body.tags);
-
-                req.body.tags = tags.split('.');
-                var hash  = new Array();
-                //console.log(tagArray);
-
-                for(i in user.age_group.tags) {
-                    hash[user.age_group.tags[i].name] = user.age_group.tags[i].number;
-                }
-                //console.log(hash);
-                for(i in req.body.tags) {
-                    if(hash[req.body.tags[i]] == undefined) {
-                        //console.log(req.body.tags[i]);
-                        hash[req.body.tags[i]] = 1;
-                    } else {
-                        hash[req.body.tags[i]] += 1;
-                    }
-                }
-
-
-                var array = new Array();
-                for(var i in hash) {
-                    var obj = {
-                        name: i,
-                        number:hash[i]
-                    };
-                    array.push(obj);
-                }
-
-
-                user.age_group.tags = array;
+                user.age_group.tags = getFinalArray(user.age_group.tags,tags);
                 user.save(function(err,features) {
                     if(err) {
                         res.json({err:err});
                     } else {
-                        console.log(features);
-                        res.json({err:false,algo_features:features});
+                        Male.findOne({ "season.type":season }, function(err, user) {
+                            if(err) {
+                                res.json({err:err});
+                            } else {
+                                user.season.tags = getFinalArray(user.season.tags,tags);
+                                user.save(function(err,features) {
+                                    if(err) {
+                                        res.json({err:err});
+                                    } else {
+                                        Male.findOne({ "occupation.type":req.body.occupation }, function(err, user) {
+                                            if(err) {
+                                                res.json({err:err});
+                                            } else {
+                                                user.occupation.tags = getFinalArray(user.occupation.tags,tags);
+                                                user.save(function(err,features) {
+                                                    if(err) {
+                                                        res.json({err:err});
+                                                    } else {
+                                                        res.json({features:features});
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                })
+                            }
+                        });
                     }
                 });
-
-
                 }
             });
             /* else {
@@ -163,5 +156,52 @@ router.post('/transaction',function(req,res,next) {
       }*/
     }
 });
+
+function getMin(age) {
+    if(age >= 18) {
+        if(age <= 25) {
+            return 18;
+        }
+        return 30;
+    } else {
+        return 10;
+    }
+}
+
+function getFinalArray(user_tags,tags) {
+
+
+        tags = tags.split('.');
+        var hash  = new Array();
+        //console.log(tagArray);
+
+        for(i in user_tags) {
+            hash[user_tags[i].name] = user_tags[i].number;
+        }
+        //console.log(hash);
+        for(i in tags) {
+            if(hash[tags[i]] == undefined) {
+                //console.log(req.body.tags[i]);
+                hash[tags[i]] = 1;
+            } else {
+                hash[tags[i]] += 1;
+            }
+        }
+
+
+        var array = new Array();
+        for(var i in hash) {
+            var obj = {
+                name: i,
+                number:hash[i]
+            };
+            array.push(obj);
+        }
+
+        return array;
+
+
+}
+
 
 module.exports = router;
