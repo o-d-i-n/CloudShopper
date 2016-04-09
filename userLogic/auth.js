@@ -11,4 +11,10 @@ var user = {
   }
 }
 
+var merch = {
+  ensureMerchant: function(req,res,next) {
+    if()
+  }
+}
+
 module.exports = user;
