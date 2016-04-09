@@ -6,13 +6,11 @@ var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var Catalog = new Schema({
-    merchant: String,
-    productID: Number,
-    category: String,
+    merchant: String, // We will refer to the product by its _id
     tags: [String],
-    dateAdded: Date,
+    dateAdded: {type:Date,default:Date.now},
     price: Number,
-    quantity: {amount:Number,default:0},
+    quantity: {type:Number,default:0},
     discount: Number // In percrntages
     gender: String, // M / F / U (Unisex)
     brand: String,
