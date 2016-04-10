@@ -7,6 +7,10 @@ angular.module('login', ['ionic', 'loginControllers', 'ngRoute', 'ngCordova'])
       templateUrl: 'partials/login.html',
       controller: 'LoginCtrl'
     }).
+    when('/profile', {
+      templateUrl: 'partials/profile.html',
+      controller: 'ProfileCtrl'
+    }).
     when('/catalog/:merchantID', {
       templateUrl: 'partials/catalog.html',
       controller: 'CatalogCtrl'
