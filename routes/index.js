@@ -14,6 +14,9 @@ router.get('/', function (req, res) {
 router.get('/test',function(req,res,next){
     res.json({test: 'test succesful'});
 });
+router.get('/admin',function(req,res,next) {
+    res.render('admin');
+});
 
 
 
