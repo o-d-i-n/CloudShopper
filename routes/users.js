@@ -82,11 +82,22 @@ router.post('/login', passport.authenticate('local'), function(req,res) {
         return res.json({success:true, user:req.user});
 });
 
+router.post('/merchantLogin', passport.authenticate('local'), function (req,res) {
+
+    Merchant.find({"userID": req.user._id}, function (err, merchant) {
+       if(err||!merchant) {
+           res.json({success:false, error:"user not found"});
+       }
+
+        else{
+           res.redirect('/admin', {merchantUser: req.user, merchantDetails: merchant});
+       }
+    });
+});
+
 router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-
-
 
 module.exports = router;
