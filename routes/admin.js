@@ -243,7 +243,7 @@ function getTagsArray(tags) {
         var obj = {
             name:tags[i],
             number:1
-        }
+        };
         array.push(obj);
     }
 
@@ -356,14 +356,27 @@ router.post('/deleteMerchant', function(req, res, next){
 
 router.post('/listAllMerchant', function(req,res,next){
 
-    Merchant.find({}, function(err, Merchant) {
+    Merchant.find({}, function(err, merchant) {
         if(err) res.json({success : false, err: err});
         else {
-            res.json({Merchant: Merchant});
+            res.json({merchant: merchant});
 
         }
     })
 });
+
+
+router.post('/listMerchantCatalog', function(req,res,next){
+
+    Catalog.find({merchant : req.body.merchant}, function(err, product) {
+        if(err) res.json({success : false, err: err});
+        else {
+            res.json({success : true, product : product});
+
+        }
+    })
+});
+
 
 
 module.exports = router;
