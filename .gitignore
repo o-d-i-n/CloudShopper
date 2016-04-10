@@ -1,4 +1,10 @@
+<<<<<<< Updated upstream
 /node_modules
 /.idea
 /config
 /npm-debug.log
+=======
+/config
+/node_modules
+/.idea
+>>>>>>> Stashed changes

@@ -1,0 +1,25 @@
+//
+   Created by shubham on 10/4/16.
+
+extends layout
+
+block meta
+    title= 'Profile - Gack Shop'
+
+block content
+    .container
+        h3.intro #{merchant.username}
+        p Here are the statistics from your shop!
+        div.
+            <canvas id="tagChart" width="400" height="400"></canvas>
+        div.
+            <canvas id="ageChart" width="400" height="400"></canvas>
+
+block scripts
+    script(src = "https://cdnjs.com/libraries/chart.js")
+    script.
+        var ctx = [];
+        ctx.push(document.getElementById("tagChart").getContext("2d"));
+        ctx.push(document.getElementById("ageChart").getContext("2d"));
+        var myPieChart1 = new Chart(ctx[0]).Pie(tags, {});
+        var myPieChart2 = new Chart(ctx[1]).Pie(age, {});
