@@ -1,15 +1,10 @@
+var express = require('express');
+var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/account');
 var auth = require('../userLogic/auth');
-var Catalog = require('../models/Catalog');
-var Male = require('../models/Male');
-var Female = require('../models/Female');
-var Transaction = require('../models/Transaction');
-var Merchant = require('../models/Merchant');
-var express = require('express');
-
-
-var router = express.Router();
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -34,9 +29,9 @@ router.post('/register',function(req,res,next) {
 
 
 //add user details
-router.post('/addDetails', function(req, res, next) {
-
-    Account.findById(req.body.accountID, function (err, account) {
+router.post('/addDetails', auth.parseString, function(req, res, next) {
+    console.log(req.body);
+    Account.findOne({'_id': req.body.accountID}, function (err, account) {
         if(err){
             return res.json({success:false, error: err});
         }
@@ -78,8 +73,7 @@ router.get('/login', function(req, res) {
     res.render('login');
 });
 
-router.post('/login', passport.authenticate('local'), function(req,res) {
-        //console.log(req.body);
+router.post('/login', auth.parseString, passport.authenticate('local'),function(req,res) {
         return res.json({success:true, user:req.user});
 });
 
@@ -100,5 +94,6 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
+
 
 module.exports = router;
