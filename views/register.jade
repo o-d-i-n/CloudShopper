@@ -1,16 +1,86 @@
 extends layout
 
+
+block meta
+  title= 'Register - Gack Shop'
+
 block content
   .container
-    h1 Register Page
-    p.lead Say something worthwhile here
-    br
-    form(role='form', action="/register",method="post", style='max-width: 300px;')
-      .form-group
-          input.form-control(type='text', name="username", placeholder='Enter Username')
-      .form-group
-        input.form-control(type='password', name="password", placeholder='Password')
-      button.btn.btn-default(type='submit') Submit
-      &nbsp;
-      a(href='/')
-        button.btn.btn-primary(type="button") Cancel
+    h3.intro REGISTER
+    p Register to get the smartest shopping companion!
+    form.col.s12#register(role='form', action="/users/register", method="post", style='max-width: 300px;')
+      div.row
+        if (info)
+          h6.red-text= info
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#userName(type='text', name="username" required=true)
+          label(for="userName") Enter Username
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#firstName(type='text', name="firstName" required=true)
+          label(for="firstName") Enter First Name
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#lastName(type='text', name="lastName" required=true)
+          label(for="lastName") Enter Last Name
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#gender(type='text', name="gender" required=true)
+          label(for="gender") Enter Gender
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#Age(type='number', name="Age" required=true)
+          label(for="Age") Enter Age
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#occupation(type='text', name="occupation" required=true)
+          label(for="occupation") Enter Occupation
+        div.input-field.col.s12
+        //i.material-icons.blue-text.darken-4.prefix star
+        input#pass1(type='password', name="password" required=true)
+        label(for="pass1") Password
+        input#endpoint(type="hidden" name="endpoint" value="")
+      div.row &nbsp; &nbsp;
+        button.btn.waves-effect.waves-light.blue.darken-4(type='submit') Submit
+    block scripts
+  script.
+    $(document).ready(function () {
+      $('#pass2').focusout(function () {
+        var pass = $('#pass1').val();
+        var pass2 = $('#pass2').val();
+        if (pass != pass2) {
+          Materialize.toast('The passwords don\'t match!', 2000)
+          $('button').attr('disabled', true);
+        } else {
+          $('button').attr('disabled', false);
+        }
+      });
+      $('#pass1').focusout(function () {
+        var pass = $('#pass1').val();
+        var pass2 = $('#pass2').val();
+        if (pass != pass2 && pass2 != '') {
+          Materialize.toast('The passwords don\'t match!', 2000)
+          $('button').attr('disabled', true);
+        } else {
+          $('button').attr('disabled', false);
+        }
+      });
+    });
+
+
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('serviceWorker.js').then(function (reg) {
+        console.log(':^)', reg);
+        reg.pushManager.subscribe({
+          userVisibleOnly: true
+        }).then(function (sub) {
+
+          document.getElementById('endpoint').value = sub.endpoint;
+          console.log(endpoint);
+        });
+      }).catch(function (error) {
+        console.log(':^(', error);
+      });
+    }
