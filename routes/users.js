@@ -43,8 +43,9 @@ router.post('/addDetails', function(req, res, next) {
 
         account.firstName=req.body.firstName;
         account.lastName=req.body.lastName;
-        account.gender=req.body.lastName;
+        account.gender=req.body.gender;
         account.age=req.body.age;
+        account.occupation = req.body.occupation;
         account.phoneNo=req.body.phoneNo;
         account.photo=req.body.photo;
         account.email=req.body.email;
@@ -54,7 +55,7 @@ router.post('/addDetails', function(req, res, next) {
                 return res.json({success: true,error:err});
             }
             else{
-                return res.json({success:true});
+                return res.json({success:true, user:account});
             }
         });
     });
