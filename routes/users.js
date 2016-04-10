@@ -1,7 +1,15 @@
-var express = require('express');
-var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/account');
+var Catalog = require('../models/Catalog');
+var Male = require('../models/Male');
+var Female = require('../models/Female');
+var Transaction = require('../models/Transaction');
+var Merchant = require('../models/Merchant');
+var express = require('express');
+
+
+var router = express.Router();
+var auth = require('../userLogic/auth')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -51,6 +59,18 @@ router.post('/addDetails', function(req, res, next) {
         });
     });
 });
+
+router.post('/newArrivals', function(req,res,next){
+
+  Catalog.find({merchant : req.body.merchant},null, {sort: '-dateAdded'},function(err, product) {
+    if(err) res.json({success : false, err: err});
+    else {
+      res.json({success : true, product : product});
+
+    }
+  }).limit(20)
+});
+
 
 
 //router.get('/login', function(req, res) {

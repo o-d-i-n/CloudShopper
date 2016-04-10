@@ -143,7 +143,32 @@ router.post('/deleteMerchant', function(req, res, next){
     });
 });
 
-router.post('/listMerchant', function(req,res,next){
+router.get('/listMerchant', function(req,res,next){
+
+    Merchant.find({}, function(err, merchant) {
+        if(err) res.json({success : false, err: err});
+        else {
+            res.json({merchant: merchant});
+
+        }
+    })
+});
+
+
+
+router.post('/listMerchantCatalog', function(req,res,next){
+
+    Catalog.find({merchant : req.body.merchant}, function(err, product) {
+        if(err) res.json({success : false, err: err});
+        else {
+            res.json({success : true, product : product});
+
+        }
+    })
+});
+
+
+router.post('/listMerchantNearby', function(req,res,next){
 
     Merchant.find({}, function(err, Merchant) {
         if(err) res.json({success : false, err: err});
@@ -153,6 +178,8 @@ router.post('/listMerchant', function(req,res,next){
         }
     })
 });
+
+
 
 //end of user-generated responses
 

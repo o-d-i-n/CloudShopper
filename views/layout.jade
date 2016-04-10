@@ -1,7 +1,126 @@
 doctype html
 html
   head
-    title= title
+    block meta
+      title= "Innovision, NSIT"
+    meta(name="theme-color" content="#ffffff")
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='/font/material\ icons/material-icons.css')
+    link(href='/stylesheets/materialize.min.css', rel='stylesheet', media='screen')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/font/intro/intro.css')
+    link(rel='manifest' href='/manifest.json')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,300', type='text/css')
+    style.
+      @media only screen and (max-width: 600px) {
+        #address {
+          text-align: center !important;
+        }
+      }
+      #listicon {
+        margin-right:0;
+      }
+      h1, h2, h3, h4, h5, h6, p, li, i, div, .btn, a {
+        color: #fff !important;
+      }
+      #big {
+        display: none;
+      }
+    block style
+    if !is_admin
+      script.
+        (function (i, s, o, g, r, a, m) {
+          i['GoogleAnalyticsObject'] = r;
+          i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                  }, i[r].l = 1 * new Date();
+          a = s.createElement(o),
+                  m = s.getElementsByTagName(o)[0];
+          a.async = 1;
+          a.src = g;
+          m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-73588354-1', 'auto');
+        ga('require', 'linkid');
+        ga('send', 'pageview');
   body
-    block content
+    nav.z-depth-0.transparent
+      div.nav-wrapper(style="padding: 8px 30px 0 30px;")
+        a#menu.brand-logo.left(href="#" data-activates="slide-out")
+          i.material-icons menu
+        a.brand-logo.hide-on-small-and-down.center.hide-on-small-and-down(href="/")
+          img#big(src="/images/inno_full_logo_poster_.png")
+        a.brand-logo.hide-on-small-and-down.right(href="/")
+          img#inno-logo-top.right(src="/images/inno-white.png" style="margin-right:10px; margin-top:5px")
+
+        ul#slide-out.side-nav
+          li
+            a.row.zero(href="/admin")
+              .bold.col.no-padding Home
+              i.material-icons.col.right home
+          li
+            a.row.zero(href="/login")
+              .bold.col.no-padding Login
+              i.material-icons.col.right login
+          li
+            a.row.zero(href="/register")
+              .bold.col.no-padding Register
+              i.material-icons.col.right register
+          li
+            a.row.zero(href="/about")
+              .bold.col.no-padding About Us
+              i.material-icons.col.right info
+    main
+      block content
+
+    footer.page-footer#footer
+      .container
+        .row
+          .col.m3.s12.center-on-small-only
+            h5 Follow Us
+            .container.zero
+              .row.center-on-small-only
+                a(target="_blank" href="https://www.facebook.com/rnoc.koobecaf.www")
+                  img#fb(src='/images/fb.png', width='20px', height='20px' style="margin-left:10px;")
+          div.col.m5.s12.center-on-small-only
+            h5 Site
+            .col.s6
+              ul
+                li
+                  a(href="/admin") Home
+                li
+                  a(href="/login") Login
+                li
+                  a(href="/register") Register
+                .col.s6
+              ul
+                li
+                  a(href="/about") About Us
+                div.col.m4.s12.center-on-small-only
+            p(itemprop="address" itemscope itemtype="http://schema.org/PostalAddress")#address.right-align.
+              <strong>Netaji Subhas Institute Of Technology</strong>
+              (University Of Delhi)
+              Azad Hind Fauj Marg
+              Sector-3, Dwarka
+              New Delhi - 110078
+      div.footer-copyright
+        div.container © 2016 Gack Shop
+          span.right.
+            <a href="//www.iubenda.com/privacy-policy/7810273" class="iubenda-black iubenda-embed" title="Privacy Policy">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "//cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+  script(src='/javascripts/jquery.min.js')
+  script(src='/javascripts/materialize.js')
+  script.
+    $(document).ready(function () {
+      $('select').material_select();
+      $('.modal-trigger').leanModal();
+      $('.collapsible').collapsible({
+        accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+      });
+      // Initialize collapse button
+      $("#menu").sideNav({
+        menuWidth: 300,
+        edge: 'left', // Choose the horizontal origin
+        closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+      });
+    });
+  block scripts
