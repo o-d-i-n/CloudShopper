@@ -20,11 +20,11 @@ router.post('/',function(req,res,next) {
     if(req.body.gender == "M") {
         var min = getMin(req.body.age);
         //Age Group
-        Male.find({ "age_group.min":min }, function(err, user) {
+        Male.findOne({ "age_group.min":min }, function(err, user) {
           if (err) {
               res.json({success:false,err:err});
           } else {console.log(user.age_group);
-              if(user.age_group != undefined) {
+              if(user) {
               for(i in user.age_group.tags) {
                   if(hash[user.age_group.tags[i].name] != undefined ) {
                       hash[user.age_group.tags[i].name] += user.age_group.tags[i].number;
@@ -36,11 +36,11 @@ router.post('/',function(req,res,next) {
 
               //season
               var season = seasonNorth(new Date());
-              Male.find({ "season.types":req.body.season }, function(err, user) {
+              Male.findOne({ "season.types":req.body.season }, function(err, user) {
                   if(err) {
                       res.json({err:err});
                   } else {
-                      if(user.season != undefined) {
+                      if(user) {
                       for(i in user.season.tags) {
                           if(hash[user.season.tags[i].name] != undefined ) {
                               hash[user.season.tags[i].name] += user.season.tags[i].number;
@@ -50,11 +50,11 @@ router.post('/',function(req,res,next) {
                       }
                     }
 
-                      Male.find({ "occupation.types":req.body.occupation }, function(err, user) {
+                      Male.findOne({ "occupation.types":req.body.occupation }, function(err, user) {
                           if(err) {
                               res.json({err:err});
                           } else {
-                              if(user.occcupation != undefined) {
+                              if(user) {
                               for(i in user.occupation.tags) {
                                   if(hash[user.occupation.tags[i].name] != undefined ) {
                                       hash[user.occupation.tags[i].name] += user.occupation.tags[i].number;
@@ -73,7 +73,10 @@ router.post('/',function(req,res,next) {
                             }
                             console.log(tagArray);
                             var id = req.body.merchantID;
-                            Catalog.find({"merchantID":Schema.ObjectId(id) , tags: { $in: tagArray }},function(err,finals) {
+                            Catalog.find( { $and : [
+                                {$or : [{"merchantID":id}] },
+                                {$or : [{ tags: {$in: tagArray} }] }
+                            ]},function(err,finals) {
                                     if(err) {
                                         res.json({success:false,err:err});
                                     } else {
