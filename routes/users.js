@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/account');
-
+var auth = require('../userLogic/auth');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.json({status: "on /user/"});
@@ -57,7 +57,8 @@ router.post('/addDetails', function(req, res, next) {
 //    res.json({user: req.user, status:'if user displayed, logged in, else log in'});
 //});
 
-router.post('/login', passport.authenticate('local'),function(req,res) {
+router.post('/login', passport.authenticate('local'), function(req,res) {
+        //console.log(req.body);
         return res.json({success:true, user:req.user});
 });
 

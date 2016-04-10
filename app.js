@@ -19,6 +19,7 @@ var app = express();
 
 
 // Add headers
+/*
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
@@ -37,7 +38,7 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
-
+*/
 
 
 app.set('views', path.join(__dirname, 'views'));

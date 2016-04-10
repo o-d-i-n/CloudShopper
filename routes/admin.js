@@ -4,19 +4,22 @@ var Catalog = require('../models/Catalog');
 var Male = require('../models/Male');
 var Female = require('../models/Female');
 var Transaction = require('../models/Transaction');
+var createSeasonResolver = require('date-season')
 var express = require('express');
 
-
+var seasonNorth = createSeasonResolver();
 var router = express.Router();
 var auth = require('../userLogic/auth')
 
 
 
-router.post('/addProduct',auth.ensureAuthenticated, function(req,res,next) {
+router.post('/addProduct', function(req,res,next) {
+
+    var tagz = String(req.body.tags).split('.');
 
   product = new Catalog({
-    merchant: req.body.merchant_id,
-    tags: req.body.tags,
+    merchantID: req.body.merchant_id,
+    tags: tagz,
     price: req.body.price,
     quantity: req.body.quantity,
     discount: req.body.discount, // In percrntages
@@ -49,15 +52,13 @@ router.post('/getDetails', function (req, res) {
 
 router.post('/transaction',function(req,res,next) {
     //Transaction Part Here
-    var prod = new Array();
-    var productz = new Array();
-    console.log(req.body.products)
-    prod = String(req.body.products).split('.');
-    for(i in prod) {
-        productz.push(JSON.parse(prod[i]));
-    }
+
+    //var productz = getJsonArray(req.body.products);
 
 
+    var productz = getJsonArray(req.body.products);
+    var tagzo = getTagsArray(req.body.tags);
+    //console.log(productz);
     var transaction = new Transaction({
         products: productz,
         buyerID: req.body.buyerID,
@@ -67,17 +68,18 @@ router.post('/transaction',function(req,res,next) {
 
     transaction.save(function(err,transaction) {
         if(err) {
-            console.log(err);
+            //console.log(err);
         } else {
             //res.json({transaction:transaction});
-            console.log(transaction);
+            //console.log(transaction);
         }
     });
 
     //Recommendation Engine Part Here
 
     var min = getMin(req.body.age);
-    var season = seasonNorth(new Date());
+    //var season = seasonNorth(new Date());
+    //console.log(season)
     var tags = String(req.body.tags);
 
     if(req.body.gender == 'M') {
@@ -85,76 +87,100 @@ router.post('/transaction',function(req,res,next) {
       Male.findOne({ "age_group.min":min }, function(err, user) {
 
         if (err) {
-
             res.json({success:false,err:err});
-
-        } else {
-                //console.log(req.body.tags);
-                user.age_group.tags = getFinalArray(user.age_group.tags,tags);
-                user.save(function(err,features) {
-                    if(err) {
-                        res.json({err:err});
-                    } else {
-                        Male.findOne({ "season.type":season }, function(err, user) {
-                            if(err) {
-                                res.json({err:err});
-                            } else {
-                                user.season.tags = getFinalArray(user.season.tags,tags);
-                                user.save(function(err,features) {
-                                    if(err) {
-                                        res.json({err:err});
-                                    } else {
-                                        Male.findOne({ "occupation.type":req.body.occupation }, function(err, user) {
-                                            if(err) {
-                                                res.json({err:err});
-                                            } else {
-                                                user.occupation.tags = getFinalArray(user.occupation.tags,tags);
-                                                user.save(function(err,features) {
-                                                    if(err) {
-                                                        res.json({err:err});
-                                                    } else {
-                                                        res.json({features:features});
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                })
-                            }
-                        });
-                    }
-                });
+        }
+        //console.log(user);
+        if(user != null) {
+            //console.log("HEYYYYYY");
+            user.age_group.tags = getFinalArray(user.age_group.tags,tags); // gets updated array
+            user.save(function(err,features) {
+                if(err){
+                    res.json({err:err});
                 }
             });
-            /* else {
 
-                var male = new Male({
-                        age_group: {
-                          min:18,
-                          max:24,
-                          tags:[{
-                            name:"shirt",
-                            number:15
-                          }]
-                        }
-                    });
 
-                male.save( function(err,male) {
-                    if(err) {
-                        res.json({err:err});
-                    } else {
-                        res.json({male:male});
+        } else {
+
+            var tagged = tagzo; // gets json array input
+            var male = new Male({
+                      age_group: {
+                      min:min,
+                      tags:tagzo
                     }
                 });
 
-            }*/
+            male.save( function(err,male) {
+                if(err) {
+                    res.json({err:err});
+                }});
+        }
+        });
 
+
+        Male.findOne({ "season.types":req.body.season }, function(err, user) {
+            if(err) {
+                res.json({err:err});
+            }
+            //console.log(user);
+            if(user != null) {
+                    console.log("YOOOO")
+                    user.season.tags = getFinalArray(user.season.tags,tags);
+                    user.save(function(err,features) {
+                        if(err) {
+                            res.json({err:err});
+                        }});
+                } else {
+                    var tagged = tagzo;
+                    console.log(req.body.season);
+                    var male = new Male({
+                              season: {
+                              types:req.body.season,
+                              tags:tagged
+                            }
+                        });
+
+                    male.save( function(err,male) {
+                        if(err) {
+                            res.json({err:err});
+                        }});
+                }
+            });
+
+                Male.findOne({ "occupation.types":req.body.occupation }, function(err, user) {
+                    if(err) {
+                        res.json({err:err});
+                    }
+                    if(user != null){
+                            user.occupation.tags = getFinalArray(user.occupation.tags,tags);
+                            user.save(function(err,features) {
+                                if(err) {
+                                    res.json({err:err});
+                                }
+                            });
+                        } else {
+                        var tagged = tagzo;
+                        var male = new Male({
+                                  occupation: {
+                                  types:req.body.occupation,
+                                  tags:tagged
+                                }
+                            });
+
+                        male.save( function(err,male) {
+                            if(err) {
+                                res.json({err:err});
+                            }});
+                        }
+                    });
 
     } else {
       /*Female.findOne({},function(err,female) {
           //SAME STUFF HERE AS ABOVE
       }*/
     }
+
+    res.json({success:true});
 });
 
 function getMin(age) {
@@ -201,6 +227,35 @@ function getFinalArray(user_tags,tags) {
         return array;
 
 
+}
+
+function getTagsArray(tags) {
+    tags = String(tags).split('.');
+
+    var array = new Array();
+
+    for(i in tags) {
+        var obj = {
+            name:tags[i],
+            number:1
+        }
+        array.push(obj);
+    }
+
+    return array;
+}
+
+function getJsonArray(tags) {
+
+    var tagg = new Array();
+    var tagged = new Array();
+    tagg = String(tags).split('.');
+
+    for(i in tagg) {
+        tagged.push(JSON.parse(tagg[i]));
+    }
+    //console.log(tagged);
+    return tagged;
 }
 
 

@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Catalog = new Schema({
-    merchant: String, // We will refer to the product by its _id
+    merchantID: Schema.ObjectId, // We will refer to the product by its _id
     tags: [String],
     dateAdded: {type:Date,default:Date.now},
     price: Number,
