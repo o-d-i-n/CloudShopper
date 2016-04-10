@@ -53,9 +53,6 @@ router.post('/addDetails', function(req, res, next) {
 });
 
 
-//router.get('/login', function(req, res) {
-//    res.json({user: req.user, status:'if user displayed, logged in, else log in'});
-//});
 
 router.post('/login', passport.authenticate('local'),function(req,res) {
         return res.json({success:true, user:req.user});

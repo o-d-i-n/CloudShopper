@@ -8,7 +8,7 @@ var express = require('express');
 
 
 var router = express.Router();
-var auth = require('../userLogic/auth')
+var auth = require('../userLogic/auth');
 
 
 
@@ -50,15 +50,6 @@ router.post('/getDetails', function (req, res) {
     }) ;
 });
 
-router.post('/transaction',auth.ensureAuthenticated,function(req,res,next) {
-    //Transaction Part Here
-
-    //transaction = new Transaction({
-    //    productID = req.body.productID
-    //
-    //});
-
-});
 
 router.post('/modifyProduct',auth.ensureAuthenticated,function(req,res,next) {
 

@@ -11,8 +11,8 @@ var Account = new Schema({
     email: String,
     Age: Number,
     Photo: String,
-    phoneNo: Number
-   // friendList: dataType
+    phoneNo: Number,
+    isMerchant: {type: Boolean, default: false}
 });
 
 Account.plugin(passportLocalMongoose);
