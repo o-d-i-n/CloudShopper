@@ -121,8 +121,18 @@ router.post('/registerMerchant', function(req,res,next) {
 
 router.post('/deleteMerchant', function(req, res, next){
 
-    //Merchant.findById(req.body.merchantID)
-    //
+    Merchant.findById(req.body.merchantID, function (err, merchant) {
+        if(err){
+            return res.json({success:false, error:err});
+        }
+        if(!merchant){
+            return res.json({success:false, error:"merchant not found"});
+        }
+
+        //currently incomplete
+
+    });
+
     Merchant.findByIdAndRemove(req.body.merchantID,function (err, merchant) {
         if (err || !merchant) {
             res.json({success: false, err: err, yolo: '2'});
