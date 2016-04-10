@@ -73,12 +73,9 @@ router.post('/newArrivals', function(req,res,next){
 
 
 
-<<<<<<< HEAD
 router.get('/login', function(req, res) {
     res.render('login');
 });
-=======
->>>>>>> ebf29082e5641215512d9b2187bcc6025e26c288
 
 router.post('/login', passport.authenticate('local'), function(req,res) {
         //console.log(req.body);
