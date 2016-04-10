@@ -14,17 +14,18 @@ var router = express.Router();
 var auth = require('../userLogic/auth')
 var seasonNorth = createSeasonResolver();
 
-router.post('/',function(req,res,next) {
+router.post('/', auth.parseString, function(req,res,next) {
+    console.log(req.body);
     var hash = new Array();
 
     if(req.body.gender == "M") {
         var min = getMin(req.body.age);
         //Age Group
-        Male.findOne({ "age_group.min":min }, function(err, user) {
+        Male.find({ "age_group.min":min }, function(err, user) {
           if (err) {
               res.json({success:false,err:err});
-          } else {
-              if(user != null) {
+          } else {console.log(user.age_group);
+              if(user.age_group != undefined) {
               for(i in user.age_group.tags) {
                   if(hash[user.age_group.tags[i].name] != undefined ) {
                       hash[user.age_group.tags[i].name] += user.age_group.tags[i].number;
@@ -36,11 +37,11 @@ router.post('/',function(req,res,next) {
 
               //season
               var season = seasonNorth(new Date());
-              Male.findOne({ "season.types":req.body.season }, function(err, user) {
+              Male.find({ "season.types":req.body.season }, function(err, user) {
                   if(err) {
                       res.json({err:err});
                   } else {
-                      if(user != null) {
+                      if(user.season != undefined) {
                       for(i in user.season.tags) {
                           if(hash[user.season.tags[i].name] != undefined ) {
                               hash[user.season.tags[i].name] += user.season.tags[i].number;
@@ -50,11 +51,11 @@ router.post('/',function(req,res,next) {
                       }
                     }
 
-                      Male.findOne({ "occupation.types":req.body.occupation }, function(err, user) {
+                      Male.find({ "occupation.types":req.body.occupation }, function(err, user) {
                           if(err) {
                               res.json({err:err});
                           } else {
-                              if(user != null) {
+                              if(user.occcupation != undefined) {
                               for(i in user.occupation.tags) {
                                   if(hash[user.occupation.tags[i].name] != undefined ) {
                                       hash[user.occupation.tags[i].name] += user.occupation.tags[i].number;
@@ -81,8 +82,6 @@ router.post('/',function(req,res,next) {
                                     }
                                 });
 
-
-
                         }
                 });
                 }
@@ -94,6 +93,7 @@ router.post('/',function(req,res,next) {
 
     } else {
         // Do for Females too
+        res.json({success:true});
     }
 
 });

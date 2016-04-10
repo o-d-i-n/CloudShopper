@@ -359,16 +359,16 @@ router.post('/listAllMerchant', function(req,res,next){
     Merchant.find({}, function(err, merchant) {
         if(err) res.json({success : false, err: err});
         else {
-            res.json({merchant: merchant});
+            res.json({merchants: merchant});
 
         }
     })
 });
 
 
-router.post('/listMerchantCatalog', function(req,res,next){
+router.post('/listMerchantCatalog', auth.parseString, function(req,res,next){
 
-    Catalog.find({merchant : req.body.merchant}, function(err, product) {
+    Catalog.find({merchantID : req.body.merchant}, function(err, product) {
         if(err) res.json({success : false, err: err});
         else {
             res.json({success : true, product : product});

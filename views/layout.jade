@@ -4,15 +4,15 @@ html
     head
         title= title
         link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href='/font/materialicons/material-icons.css')
         <!-- Compiled and minified CSS -->
         link(rel="stylesheet",href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css")
     body
         nav
             .nav-wrapper
                 .container
-                    a.brand-logo(href="#") ShopperCompanion
+                    a.brand-logo.center(href="#") ShopperCompanion
+                        a.btn-floating.btn-large.waves-effect.waves-light.red
+                            i.material-icons add
         main
             block content
-
-        //  footer.page-footer
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js")
