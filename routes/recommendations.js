@@ -86,6 +86,9 @@ router.post('/',function(req,res,next) {
                                                 score += hash[finals[i].tags[j]];
                                             }
                                         }
+
+
+
                                         //Score finals
                                     res.json({success:true,finals:finals});
                                     }

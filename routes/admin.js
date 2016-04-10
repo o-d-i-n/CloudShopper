@@ -4,11 +4,12 @@ var Catalog = require('../models/Catalog');
 var Male = require('../models/Male');
 var Female = require('../models/Female');
 var Transaction = require('../models/Transaction');
+var mongoose = require('mongoose');
 var Merchant = require('../models/Merchant');
 var Analytics = require('../models/Analytics');
 var createSeasonResolver = require('date-season')
 var express = require('express');
-
+var Schema = mongoose.Schema;
 var seasonNorth = createSeasonResolver();
 var router = express.Router();
 var auth = require('../userLogic/auth');
@@ -458,11 +459,12 @@ router.post('/listAllMerchant', function(req,res,next){
 
 router.post('/listMerchantCatalog', function(req,res,next){
 
-    Catalog.find({"merchantID" : req.body.merchantID}, function(err, product) {
-        if(err) res.json({success : false, err: err});
+    Catalog.find({merchantID:req.body.merchant_id}, function(err, product) {
+        if(err) {
+            res.json({success : false, err: err});
+        }
         else {
             res.json({success : true, product : product});
-
         }
     })
 });
