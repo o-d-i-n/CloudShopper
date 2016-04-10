@@ -15,7 +15,7 @@ var Transaction = new Schema({
     date:  {type:Date,default:Date.now},
     merchantID: Schema.ObjectId,
     bill: String
-    // friendList: dataType
+
 });
 
 

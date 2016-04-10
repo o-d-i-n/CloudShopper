@@ -11,14 +11,14 @@ var Male = new Schema({
       }]
     },
     season: {
-      type:String, // winter,summer,spring,fall
-      tags:{
+      types:String, // winter,summer,spring,fall
+      tags:[{
         name:String,
         number:Number
-      },
+    }]
     },
     occupation: {
-      type: String, // student,professional,buisness,retired
+      types: String, // student,professional,buisness,retired
       tags:[{
         name:String,
         number:Number
