@@ -190,7 +190,7 @@ router.post('/transaction',function(req,res,next) {
     res.json({success:true});
 });
 
-router.get('/analytics',function(req,res,next)) {
+router.get('/analytics',function(req,res,next) {
     // get most bought tags
     // get fastest selling?
     // what percentage of what type of users shop here
@@ -198,7 +198,7 @@ router.get('/analytics',function(req,res,next)) {
 
 
 
-}
+});
 
 function getMin(age) {
     if(age >= 18) {
