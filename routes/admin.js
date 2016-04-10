@@ -16,7 +16,7 @@ var auth = require('../userLogic/auth');
 
 
 
-router.post('/addProduct', function(req,res,next) {
+router.post('/addProduct', auth.parseJSON,function(req,res,next) {
 
     var tagz = String(req.body.tags).split('.');
 
@@ -77,12 +77,11 @@ router.post('/transaction',function(req,res,next) {
 
     transaction.save(function(err,transaction) {
         if(err) {
-            //console.log(err);
             return res.json({err:err});
         }
     });
 
-    sendToAnalytics(tagzo,req.body.merchantID,req.body.age);
+    sendToAnalytics(tagzo,req.body.merchantID,req.body.age,res);
 
     //Recommendation Engine Part Here
 
@@ -96,7 +95,7 @@ router.post('/transaction',function(req,res,next) {
       Male.findOne({ "age_group.min":min }, function(err, user) {
 
         if (err) {
-            res.json({success:false,err:err});
+            return res.json({success:false,err:err});
         }
         //console.log(user);
         if(user != null) {
@@ -104,7 +103,7 @@ router.post('/transaction',function(req,res,next) {
             user.age_group.tags = getFinalArray(user.age_group.tags,tags); // gets updated array
             user.save(function(err,features) {
                 if(err){
-                    res.json({err:err});
+                    return res.json({err:err});
                 }
             });
 
@@ -121,7 +120,7 @@ router.post('/transaction',function(req,res,next) {
 
             male.save( function(err,male) {
                 if(err) {
-                    res.json({err:err});
+                    return res.json({err:err});
                 }});
         }
         });
@@ -129,7 +128,7 @@ router.post('/transaction',function(req,res,next) {
 
         Male.findOne({ "season.types":req.body.season }, function(err, user) {
             if(err) {
-                res.json({err:err});
+                return res.json({err:err});
             }
             //console.log(user);
             if(user != null) {
@@ -137,7 +136,7 @@ router.post('/transaction',function(req,res,next) {
                     user.season.tags = getFinalArray(user.season.tags,tags);
                     user.save(function(err,features) {
                         if(err) {
-                            res.json({err:err});
+                            return res.json({err:err});
                         }});
                 } else {
                     var tagged = tagzo;
@@ -151,14 +150,14 @@ router.post('/transaction',function(req,res,next) {
 
                     male.save( function(err,male) {
                         if(err) {
-                            res.json({err:err});
+                            return res.json({err:err});
                         }});
                 }
             });
 
                 Male.findOne({ "occupation.types":req.body.occupation }, function(err, user) {
                     if(err) {
-                        res.json({err:err});
+                        return res.json({err:err});
                     }
                     if(user != null){
                             user.occupation.tags = getFinalArray(user.occupation.tags,tags);
@@ -178,7 +177,7 @@ router.post('/transaction',function(req,res,next) {
 
                         male.save( function(err,male) {
                             if(err) {
-                                res.json({err:err});
+                                return res.json({err:err});
                             }});
                         }
                     });
@@ -189,7 +188,7 @@ router.post('/transaction',function(req,res,next) {
       }*/
     }
 
-    res.json({success:true});
+    return res.json({success:true});
 });
 
 router.post('/analytics',function(req,res,next) {
@@ -269,17 +268,18 @@ function sendToAnalytics(tags,merchantID,age) {
         array.push(obj);
     }
 
-    Analytics.findOne({"merchantID":merchantID},function(err,record) {
+    Analytics.findOne({"merchantID":merchantID},function(err,record,res) {
 
         if(err) {
             return;
         }
 
-            if(!record) {
+            if(!record)
+            {
                 var analytics = new Analytics({
                     merchantID: merchantID,
                     tags: array
-            });
+                });
 
             if(age < 18) {
                 analytics.kid = 1
@@ -291,7 +291,10 @@ function sendToAnalytics(tags,merchantID,age) {
 
             analytics.save(function(err,record) {
                 if(err) {
-                    return res.json({err:err});
+
+                    console.log(err);
+                    res.json({err:err});
+
                 } else {
                 return;
                 }
@@ -445,21 +448,21 @@ router.post('/deleteMerchant', function(req, res, next){
     });
 });
 
-router.post('/listAllMerchant', function(req,res,next){
+router.post('/listAllMerchant', auth.parseJSON,function(req,res,next){
 
     Merchant.find({}, function(err, merchant) {
         if(err) res.json({success : false, err: err});
         else {
-            res.json({merchant: merchant});
+            res.json({merchants: merchant});
 
         }
     })
 });
 
 
-router.post('/listMerchantCatalog', function(req,res,next){
+router.post('/listMerchantCatalog',auth.parseJSON, function(req,res,next){
 
-    Catalog.find({merchantID:req.body.merchant_id}, function(err, product) {
+    Catalog.find({merchantID:req.body.merchant}, function(err, product) {
         if(err) {
             res.json({success : false, err: err});
         }

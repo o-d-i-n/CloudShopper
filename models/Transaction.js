@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 
 var Transaction = new Schema({
     products: [{
-        productID: Number,
+        productID: Schema.ObjectId,
         quantity: Number,
         totalPrice: Number
     }],

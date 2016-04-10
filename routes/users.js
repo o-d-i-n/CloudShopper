@@ -34,7 +34,7 @@ router.post('/register',function(req,res,next) {
 
 
 //add user details
-router.post('/addDetails', function(req, res, next) {
+router.post('/addDetails', auth.parseJSON,function(req, res, next) {
 
     Account.findById(req.body.accountID, function (err, account) {
         if(err){
@@ -77,7 +77,7 @@ router.get('/login', function(req, res) {
     res.render('login');
 });
 
-router.post('/login', passport.authenticate('local'), function(req,res) {
+router.post('/login',auth.parseJSON, passport.authenticate('local'), function(req,res) {
         //console.log(req.body);
         return res.json({success:true, user:req.user});
 });
