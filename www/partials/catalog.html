@@ -1,0 +1,39 @@
+<div>
+  <div class="bar bar-header bar-light">
+    <h1 class="title">Catalog</h1>
+  </div>
+  <div class="list card">
+    <div class="item item-avatar">
+      <p>{{product.brand}}</p>
+      <h2>{{product.name}}</h2>
+      <p>{{product.price}}</p>
+    </div>
+
+    <div class="item item-image">
+      <!--<img src={{product.image}}>-->
+    </div>
+
+    <a class="item item-icon-left assertive" href='#'>
+      <i class="icon ion-arrow-right-a"></i>
+      More Details
+    </a>
+  </div>
+  <div class="list" ng-repeat="product in catalog">
+    <div class="list card">
+      <div class="item item-avatar">
+        <p>{{product.brand}}</p>
+        <h2>{{product.name}}</h2>
+        <p>{{product.price}}</p>
+      </div>
+
+      <div class="item item-image">
+        <!--<img src={{product.image}}>-->
+      </div>
+
+      <a class="item item-icon-left assertive" href='#'>
+        <i class="icon ion-arrow-right-a"></i>
+        More Details
+      </a>
+    </div>
+  </div>
+</div>
