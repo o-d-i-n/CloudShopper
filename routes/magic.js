@@ -25,3 +25,5 @@ router.post('/getMerchants', function (req, res) {
         return res.json({success:true, merchants: merchant});
     });
 });
+
+module.exports = router;
