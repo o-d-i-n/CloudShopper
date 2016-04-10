@@ -9,7 +9,7 @@ var express = require('express');
 
 
 var router = express.Router();
-var auth = require('../userLogic/auth')
+var auth = require('../userLogic/auth');
 
 
 
@@ -51,15 +51,6 @@ router.post('/getDetails', function (req, res) {
     }) ;
 });
 
-router.post('/transaction',auth.ensureAuthenticated,function(req,res,next) {
-    //Transaction Part Here
-
-    //transaction = new Transaction({
-    //    productID = req.body.productID
-    //
-    //});
-
-});
 
 router.post('/modifyProduct',auth.ensureAuthenticated,function(req,res,next) {
 
@@ -111,14 +102,11 @@ router.post('/listProduct',  function(req,res,next){
 
 router.post('/registerMerchant', function(req,res,next) {
 
+
     merchant = new Merchant({
+        userID: req.body.userID,
         username: req.body.username,
-        password: req.body.password,
         address: req.body.address,
-        phoneNo:req.body.phoneNo,
-        email: req.body.email,
-        Age: req.body.Age,
-        Photo: req.body.Photo,
         location: req.body.location
     });
 
@@ -133,7 +121,9 @@ router.post('/registerMerchant', function(req,res,next) {
 
 router.post('/deleteMerchant', function(req, res, next){
 
-    Merchant.findByIdAndRemove(req.body.merchant_id,function (err, merchant) {
+    //Merchant.findById(req.body.merchantID)
+    //
+    Merchant.findByIdAndRemove(req.body.merchantID,function (err, merchant) {
         if (err || !merchant) {
             res.json({success: false, err: err, yolo: '2'});
         } else {
@@ -143,7 +133,7 @@ router.post('/deleteMerchant', function(req, res, next){
     });
 });
 
-router.get('/listMerchant', function(req,res,next){
+router.post('/listAllMerchant', function(req,res,next){
 
     Merchant.find({}, function(err, merchant) {
         if(err) res.json({success : false, err: err});
@@ -162,18 +152,6 @@ router.post('/listMerchantCatalog', function(req,res,next){
         if(err) res.json({success : false, err: err});
         else {
             res.json({success : true, product : product});
-
-        }
-    })
-});
-
-
-router.post('/listMerchantNearby', function(req,res,next){
-
-    Merchant.find({}, function(err, Merchant) {
-        if(err) res.json({success : false, err: err});
-        else {
-            res.json({Merchant: Merchant});
 
         }
     })

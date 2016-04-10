@@ -4,16 +4,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//merchant account will be same as account
+//so that passport is not set up two times
 var Merchant = new Schema({
+    userID: Schema.ObjectId,
     username: String,
-    password: String,
     address: String,
-    phoneNo: String,
-    email: String,
-    Age: Number,
-    Photo: String,
-    location: {lat: Number, long: Number}
-    // friendList: dataType
+    location: { type: String, coordinates: [Number]}
 });
 
 
