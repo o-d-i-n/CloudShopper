@@ -196,7 +196,15 @@ router.get('/analytics',function(req,res,next) {
     // what percentage of what type of users shop here
     // lowest selling
 
+    Analytics.findOne({"merchantID":req.body.merchantID},function(err,record) {
 
+        if(err) {
+            res.json({err:err});
+        } else {
+            res.json({record:record});
+        }
+
+    });
 
 });
 
@@ -449,7 +457,7 @@ router.post('/listAllMerchant', function(req,res,next){
 
 router.post('/listMerchantCatalog', auth.parseString, function(req,res,next){
 
-    Catalog.find({merchantID : req.body.merchant}, function(err, product) {
+    Catalog.find({merchant : req.body.merchant}, function(err, product) {
         if(err) res.json({success : false, err: err});
         else {
             res.json({success : true, product : product});
@@ -457,8 +465,6 @@ router.post('/listMerchantCatalog', auth.parseString, function(req,res,next){
         }
     })
 });
-
-
 
 
 
