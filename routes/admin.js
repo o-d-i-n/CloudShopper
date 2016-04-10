@@ -4,10 +4,12 @@ var Catalog = require('../models/Catalog');
 var Male = require('../models/Male');
 var Female = require('../models/Female');
 var Transaction = require('../models/Transaction');
+var mongoose = require('mongoose');
 var Merchant = require('../models/Merchant');
+var Analytics = require('../models/Analytics');
 var createSeasonResolver = require('date-season')
 var express = require('express');
-
+var Schema = mongoose.Schema;
 var seasonNorth = createSeasonResolver();
 var router = express.Router();
 var auth = require('../userLogic/auth');
@@ -41,6 +43,7 @@ router.post('/addProduct', function(req,res,next) {
   //dont know why chahal added this comment
 });
 
+
 //getUserDetails
 router.post('/getDetails', function (req, res) {
     Account.findById(req.body.accountID, function (err, account) {
@@ -54,11 +57,12 @@ router.post('/getDetails', function (req, res) {
     }) ;
 });
 
+//  Input age ,tags(seperated by a comma) and merchantID
 
 router.post('/transaction',function(req,res,next) {
-    //Transaction Part Here
+    //  Transaction Part Here
 
-    //var productz = getJsonArray(req.body.products);
+    //  var productz = getJsonArray(req.body.products);
 
 
     var productz = getJsonArray(req.body.products);
@@ -74,11 +78,11 @@ router.post('/transaction',function(req,res,next) {
     transaction.save(function(err,transaction) {
         if(err) {
             //console.log(err);
-        } else {
-            //res.json({transaction:transaction});
-            //console.log(transaction);
+            return res.json({err:err});
         }
     });
+
+    sendToAnalytics(tagzo,req.body.merchantID,req.body.age);
 
     //Recommendation Engine Part Here
 
@@ -188,6 +192,24 @@ router.post('/transaction',function(req,res,next) {
     res.json({success:true});
 });
 
+router.post('/analytics',function(req,res,next) {
+    // get most bought tags
+    // get fastest selling?
+    // what percentage of what type of users shop here
+    // lowest selling
+
+    Analytics.findOne({"merchantID":req.body.merchantID},function(err,record) {
+
+        if(err) {
+            res.json({err:err});
+        } else {
+            res.json({record:record});
+        }
+
+    });
+
+});
+
 function getMin(age) {
     if(age >= 18) {
         if(age <= 25) {
@@ -233,6 +255,75 @@ function getFinalArray(user_tags,tags) {
 
 
 }
+
+function sendToAnalytics(tags,merchantID,age) {
+
+    var array = new Array();
+    var hash = new Array();
+    for(i in tags) {
+        var obj = {
+            name: tags[i],
+            number: 1
+        }
+        hash[tags[i]] = 1;
+        array.push(obj);
+    }
+
+    Analytics.findOne({"merchantID":merchantID},function(err,record) {
+
+        if(err) {
+            return;
+        }
+
+            if(!record) {
+                var analytics = new Analytics({
+                    merchantID: merchantID,
+                    tags: array
+            });
+
+            if(age < 18) {
+                analytics.kid = 1
+            } else if(age > 25) {
+                analytics.adult = 1
+            } else {
+                analytics.youngster = 1
+            }
+
+            analytics.save(function(err,record) {
+                if(err) {
+                    return res.json({err:err});
+                } else {
+                return;
+                }
+            });
+
+        } else {
+            for(i in record.tags) {
+                if(hash[record.tags[i].name]) {
+                    record.tags[i].number += 1;
+                }
+            }
+
+            if(age < 18) {
+                record.kid = 1
+            } else if(age > 25) {
+                record.adult = 1
+            } else {
+                record.youngster = 1
+            }
+
+            record.save(function(err,recordz) {
+                if(err) {
+                    return res.json({err:err});
+                } else {
+                    return;
+                }
+            });
+        }
+    });
+
+}
+
 
 function getTagsArray(tags) {
     tags = String(tags).split('.');
@@ -368,17 +459,15 @@ router.post('/listAllMerchant', function(req,res,next){
 
 router.post('/listMerchantCatalog', auth.parseString, function(req,res,next){
 
-    Catalog.find({merchantID : req.body.merchant}, function(err, product) {
-        if(err) res.json({success : false, err: err});
+    Catalog.find({merchantID: req.body.merchant_id}, function(err, product) {
+        if(err) {
+            res.json({success: false, err: err});
+        }
         else {
             res.json({success : true, product : product});
-
         }
-    })
+    });
 });
-
-
-
 
 
 module.exports = router;
