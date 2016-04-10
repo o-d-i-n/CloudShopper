@@ -80,6 +80,13 @@ router.post('/',function(req,res,next) {
                                     if(err) {
                                         res.json({success:false,err:err});
                                     } else {
+                                        for(i in finals) {
+                                            var score = 0;
+                                            for(j in finals[i].tags) {
+                                                score += hash[finals[i].tags[j]];
+                                            }
+                                        }
+                                        //Score finals
                                     res.json({success:true,finals:finals});
                                     }
                                 });
