@@ -11,7 +11,7 @@ var Merchants = require('../models/Merchant');
 var auth = require('../userLogic/auth');
 var express = require('express');
 var router = express.Router();
-
+//function not working
 router.post('/getMerchants', auth.parseString, function (req, res) {
 
     Merchants.find({
