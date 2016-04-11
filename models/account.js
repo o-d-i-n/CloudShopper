@@ -12,6 +12,7 @@ var Account = new Schema({
     Age: Number,
     Photo: String,
     phoneNo: Number,
+    occupation: String,
     isMerchant: {type: Boolean, default: false}
 });
 

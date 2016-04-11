@@ -16,7 +16,7 @@ var auth = require('../userLogic/auth');
 
 
 
-router.post('/addProduct', auth.parseJSON,function(req,res,next) {
+router.post('/addProduct',function(req,res,next) {
 
     var tagz = String(req.body.tags).split('.');
 
@@ -41,11 +41,12 @@ router.post('/addProduct', auth.parseJSON,function(req,res,next) {
 
   //Recomendation Engine Part
   //dont know why chahal added this comment
+  //Chahal : lol
 });
 
-
 //getUserDetails
-router.post('/getDetails', function (req, res) {
+router.post('/getDetails',function(req,res,next) {
+
     Account.findById(req.body.accountID, function (err, account) {
         if(err){
             return res.json({success:false, error:err});
@@ -191,7 +192,7 @@ router.post('/transaction',function(req,res,next) {
     return res.json({success:true});
 });
 
-router.post('/analytics',function(req,res,next) {
+router.get('/analytics',function(req,res,next) {
     // get most bought tags
     // get fastest selling?
     // what percentage of what type of users shop here
@@ -202,7 +203,37 @@ router.post('/analytics',function(req,res,next) {
         if(err) {
             res.json({err:err});
         } else {
-            res.json({record:record});
+            Merchant.findOne({userID: req.body.merchantID}, function(err, merchant) {
+                var tags = [];
+                var age = [];
+                for(var i in record.tags) {
+                    tags.push({
+                        value: record.tags[i].number,
+                        label: record.tags[i].name,
+                        color: "rgb(" + (record.tags[i].number + 50)%256 + "," + (record.tags[i].number - 50)%256 + "," + (record.tags[i].number + 100)%256 + ")",
+                        highlight: "rgb(" + (record.tags[i].number + 45)%256 + "," + (record.tags[i].number - 45)%256 + "," + (record.tags[i].number + 90)%256 + ")"
+                    })
+                }
+                age.push({
+                    value: record.kid,
+                    label: "Kids",
+                    color: "rgb(" + (record.kid + 50)%256 + "," + (record.kid - 50)%256 + "," + (record.kid + 100)%256 + ")",
+                    highlight: "rgb(" + (record.kid + 45)%256 + "," + (record.kid - 45)%256 + "," + (record.kid + 90)%256 + ")"
+                });
+                age.push({
+                    value: record.youngster,
+                    label: "Youngsters",
+                    color: "rgb(" + (record.youngster + 50)%256 + "," + (record.youngster - 50)%256 + "," + (record.youngster + 100)%256 + ")",
+                    highlight: "rgb(" + (record.youngster + 45)%256 + "," + (record.youngster - 45)%256 + "," + (record.youngster + 90)%256 + ")"
+                });
+                age.push({
+                    value: record.adult,
+                    label: "Adults",
+                    color: "rgb(" + (record.adult + 50)%256 + "," + (record.adult - 50)%256 + "," + (record.adult + 100)%256 + ")",
+                    highlight: "rgb(" + (record.adult + 45)%256 + "," + (record.adult - 45)%256 + "," + (record.adult + 90)%256 + ")"
+                });
+                res.render('profile', {tags: tags, age: age, merchant:merchant });
+            });
         }
 
     });
@@ -448,7 +479,7 @@ router.post('/deleteMerchant', function(req, res, next){
     });
 });
 
-router.post('/listAllMerchant', auth.parseJSON,function(req,res,next){
+router.post('/listAllMerchant',function(req,res,next){
 
     Merchant.find({}, function(err, merchant) {
         if(err) res.json({success : false, err: err});
@@ -460,18 +491,18 @@ router.post('/listAllMerchant', auth.parseJSON,function(req,res,next){
 });
 
 
-router.post('/listMerchantCatalog',auth.parseJSON, function(req,res,next){
+
+router.post('/listMerchantCatalog', function(req,res,next){
 
     Catalog.find({merchantID:req.body.merchant}, function(err, product) {
         if(err) {
-            res.json({success : false, err: err});
+            res.json({success: false, err: err});
         }
         else {
             res.json({success : true, product : product});
         }
-    })
+    });
 });
-
 
 
 module.exports = router;

@@ -14,7 +14,8 @@ var router = express.Router();
 var auth = require('../userLogic/auth')
 var seasonNorth = createSeasonResolver();
 
-router.post('/',function(req,res,next) {
+router.post('/', auth.parseString, function(req,res,next) {
+    console.log(req.body);
     var hash = new Array();
 
     if(req.body.gender == "M") {

@@ -1,22 +1,5 @@
 extends layout
 
-block content
-  .container
-    h1 Register Page
-    p.lead Say something worthwhile here
-    br
-    form(role='form', action="/register",method="post", style='max-width: 300px;')
-      .form-group
-          input.form-control(type='text', name="username", placeholder='Enter Username')
-      .form-group
-        input.form-control(type='password', name="password", placeholder='Password')
-      button.btn.btn-default(type='submit') Submit
-      &nbsp;
-      a(href='/')
-        button.btn.btn-primary(type="button") Cancel
-
-extends layout
-
 
 block meta
   title= 'Register - Gack Shop'
@@ -25,28 +8,42 @@ block content
   .container
     h3.intro REGISTER
     p Register to get the smartest shopping companion!
-    form.col.s12#register(role='form', action="/register", method="post", style='max-width: 300px;')
+    form.col.s12#register(role='form', action="/users/register", method="post", style='max-width: 300px;')
       div.row
         if (info)
           h6.red-text= info
         div.input-field.col.s12
           //i.material-icons.blue-text.darken-4.prefix email
-          input#email(type='email', name="username" required=true)
-          label(for="email") Enter Email
+          input#userName(type='text', name="username" required=true)
+          label(for="userName") Enter Username
         div.input-field.col.s12
-          //i.material-icons.blue-text.darken-4.prefix star
-          input#pass1(type='password', name="password" required=true)
-          label(for="pass1") Password
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#firstName(type='text', name="firstName" required=true)
+          label(for="firstName") Enter First Name
         div.input-field.col.s12
-          //i.material-icons.blue-text.darken-4.prefix star
-          input#pass2(type='password', name="password2" required=true)
-          label(for="pass2") Confirm Password
-          input#endpoint(type="hidden" name="endpoint" value="")
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#lastName(type='text', name="lastName" required=true)
+          label(for="lastName") Enter Last Name
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#gender(type='text', name="gender" required=true)
+          label(for="gender") Enter Gender
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#Age(type='number', name="Age" required=true)
+          label(for="Age") Enter Age
+        div.input-field.col.s12
+          //i.material-icons.blue-text.darken-4.prefix email
+          input#occupation(type='text', name="occupation" required=true)
+          label(for="occupation") Enter Occupation
+        div.input-field.col.s12
+        //i.material-icons.blue-text.darken-4.prefix star
+        input#pass1(type='password', name="password" required=true)
+        label(for="pass1") Password
+        input#endpoint(type="hidden" name="endpoint" value="")
       div.row &nbsp; &nbsp;
         button.btn.waves-effect.waves-light.blue.darken-4(type='submit') Submit
-    a.col.s12(href="/login/fb")
-      img(src='/images/fb_login.png', style='max-width: 200px; margin: 0 0 20px 0;')
-block scripts
+    block scripts
   script.
     $(document).ready(function () {
       $('#pass2').focusout(function () {
@@ -87,10 +84,3 @@ block scripts
         console.log(':^(', error);
       });
     }
-
-
-
-
-block style
-  style
-    include ../public/stylesheets/pages/about.css

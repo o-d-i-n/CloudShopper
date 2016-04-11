@@ -1,15 +1,10 @@
+var express = require('express');
+var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/account');
 var auth = require('../userLogic/auth');
-var Catalog = require('../models/Catalog');
-var Male = require('../models/Male');
-var Female = require('../models/Female');
-var Transaction = require('../models/Transaction');
-var Merchant = require('../models/Merchant');
-var express = require('express');
-
-
-var router = express.Router();
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -34,7 +29,7 @@ router.post('/register',function(req,res,next) {
 
 
 //add user details
-router.post('/addDetails', auth.parseJSON,function(req, res, next) {
+router.post('/addDetails',function(req, res, next) {
 
     Account.findById(req.body.accountID, function (err, account) {
         if(err){
@@ -43,8 +38,9 @@ router.post('/addDetails', auth.parseJSON,function(req, res, next) {
 
         account.firstName=req.body.firstName;
         account.lastName=req.body.lastName;
-        account.gender=req.body.lastName;
-        account.age=req.body.age;
+        account.gender=req.body.gender;
+        account.Age=req.body.age;
+        account.occupation = req.body.occupation;
         account.phoneNo=req.body.phoneNo;
         account.photo=req.body.photo;
         account.email=req.body.email;
@@ -54,7 +50,7 @@ router.post('/addDetails', auth.parseJSON,function(req, res, next) {
                 return res.json({success: true,error:err});
             }
             else{
-                return res.json({success:true});
+                return res.json({success:true, user:account});
             }
         });
     });
@@ -77,16 +73,27 @@ router.get('/login', function(req, res) {
     res.render('login');
 });
 
-router.post('/login',auth.parseJSON, passport.authenticate('local'), function(req,res) {
-        //console.log(req.body);
+router.post('/login', passport.authenticate('local'), function(req,res) {
         return res.json({success:true, user:req.user});
+});
+
+router.post('/merchantLogin', passport.authenticate('local'), function (req,res) {
+
+    Merchant.find({"userID": req.user._id}, function (err, merchant) {
+       if(err||!merchant) {
+           res.json({success:false, error:"user not found"});
+       }
+
+        else{
+           res.redirect('/admin', {merchantUser: req.user, merchantDetails: merchant});
+       }
+    });
 });
 
 router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-
 
 
 module.exports = router;

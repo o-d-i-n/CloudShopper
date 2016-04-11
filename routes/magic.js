@@ -8,9 +8,11 @@ var Female = require('../models/Female');
 var Transaction = require('../models/Transaction');
 var express = require('express');
 var Merchants = require('../models/Merchant');
+var auth = require('../userLogic/auth');
+var express = require('express');
+var router = express.Router();
 
-
-router.post('/getMerchants', function (req, res) {
+router.post('/getMerchants', auth.parseString, function (req, res) {
 
     Merchants.find({
         location: {
@@ -19,9 +21,11 @@ router.post('/getMerchants', function (req, res) {
         }
     }).limit(req.body.limit||30).exec(function (err, merchant) {
         if(err){
-            return res.json({success:false});
+            return res.json({success:false, err: err});
         }
 
         return res.json({success:true, merchants: merchant});
     });
 });
+
+module.exports = router;
