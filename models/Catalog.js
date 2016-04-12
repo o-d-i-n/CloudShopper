@@ -14,7 +14,8 @@ var Catalog = new Schema({
     gender: String, // M / F / U (Unisex)
     brand: String,
     name: String,
-    photo: String
+    photo: String,
+    score:Number
     // friendList: dataType
 });
 

@@ -24,7 +24,7 @@ router.post('/', function(req,res,next) {
         Male.findOne({ "age_group.min":min }, function(err, user) {
           if (err) {
               res.json({success:false,err:err});
-          } else {console.log(user.age_group);
+          } else {
               if(user) {
               for(i in user.age_group.tags) {
                   if(hash[user.age_group.tags[i].name] != undefined ) {
@@ -72,7 +72,7 @@ router.post('/', function(req,res,next) {
                             for(var i in hash) {
                                 tagArray.push(i);
                             }
-                            console.log(tagArray);
+
                             var id = req.body.merchantID;
                             Catalog.find( { $and : [
                                 {$or : [{"merchantID":id}] },
@@ -81,18 +81,27 @@ router.post('/', function(req,res,next) {
                                     if(err) {
                                         res.json({success:false,err:err});
                                     } else {
+                                        var final = finals;
                                         for(i in finals) {
                                             var score = 0;
                                             for(j in finals[i].tags) {
-                                                score += hash[finals[i].tags[j]];
+
+                                                if(hash[finals[i].tags[j]])
+                                                    score += hash[finals[i].tags[j]];
+
                                             }
+
+                                            final[i].score = score;
+                                            console.log(final[i]);
+
                                             //sort function according to score
                                         }
 
 
 
                                         //Score finals
-                                    res.json({success:true,finals:finals});
+
+                                    res.json({success:true,finals:final});
                                     }
                                 });
 
