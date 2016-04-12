@@ -14,7 +14,7 @@ var router = express.Router();
 var auth = require('../userLogic/auth')
 var seasonNorth = createSeasonResolver();
 
-router.post('/', auth.parseString, function(req,res,next) {
+router.post('/', function(req,res,next) {
     console.log(req.body);
     var hash = new Array();
 
@@ -86,6 +86,7 @@ router.post('/', auth.parseString, function(req,res,next) {
                                             for(j in finals[i].tags) {
                                                 score += hash[finals[i].tags[j]];
                                             }
+                                            //sort function according to score
                                         }
 
 

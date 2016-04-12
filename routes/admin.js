@@ -104,7 +104,7 @@ router.post('/transaction',function(req,res,next) {
             user.age_group.tags = getFinalArray(user.age_group.tags,tags); // gets updated array
             user.save(function(err,features) {
                 if(err){
-                    return res.json({err:err});
+                    console.log(err);
                 }
             });
 
@@ -121,7 +121,7 @@ router.post('/transaction',function(req,res,next) {
 
             male.save( function(err,male) {
                 if(err) {
-                    return res.json({err:err});
+                    console.log(err);
                 }});
         }
         });
@@ -129,16 +129,17 @@ router.post('/transaction',function(req,res,next) {
 
         Male.findOne({ "season.types":req.body.season }, function(err, user) {
             if(err) {
-                return res.json({err:err});
+                console.log(err);
             }
             //console.log(user);
             if(user != null) {
-                    console.log("YOOOO")
+
                     user.season.tags = getFinalArray(user.season.tags,tags);
                     user.save(function(err,features) {
                         if(err) {
-                            return res.json({err:err});
+                            console.log(err);
                         }});
+
                 } else {
                     var tagged = tagzo;
                     console.log(req.body.season);
@@ -151,7 +152,7 @@ router.post('/transaction',function(req,res,next) {
 
                     male.save( function(err,male) {
                         if(err) {
-                            return res.json({err:err});
+                            console.log(err);
                         }});
                 }
             });
@@ -164,7 +165,7 @@ router.post('/transaction',function(req,res,next) {
                             user.occupation.tags = getFinalArray(user.occupation.tags,tags);
                             user.save(function(err,features) {
                                 if(err) {
-                                    res.json({err:err});
+                                    console.log(err);
                                 }
                             });
                         } else {
@@ -178,7 +179,7 @@ router.post('/transaction',function(req,res,next) {
 
                         male.save( function(err,male) {
                             if(err) {
-                                return res.json({err:err});
+                                console.log(err);
                             }});
                         }
                     });
@@ -292,10 +293,10 @@ function sendToAnalytics(tags,merchantID,age) {
     var hash = new Array();
     for(i in tags) {
         var obj = {
-            name: tags[i],
-            number: 1
+            name: tags[i].name,
+            number: tags[i].number
         }
-        hash[tags[i]] = 1;
+        hash[tags[i].name] = tags[i].number;
         array.push(obj);
     }
 
@@ -324,7 +325,7 @@ function sendToAnalytics(tags,merchantID,age) {
                 if(err) {
 
                     console.log(err);
-                    res.json({err:err});
+
 
                 } else {
                 return;
@@ -332,23 +333,25 @@ function sendToAnalytics(tags,merchantID,age) {
             });
 
         } else {
+
             for(i in record.tags) {
                 if(hash[record.tags[i].name]) {
+                    console.log(record.tags[i])
                     record.tags[i].number += 1;
                 }
             }
 
             if(age < 18) {
-                record.kid = 1
+                record.kid += 1
             } else if(age > 25) {
-                record.adult = 1
+                record.adult += 1
             } else {
-                record.youngster = 1
+                record.youngster += 1
             }
 
             record.save(function(err,recordz) {
                 if(err) {
-                    return res.json({err:err});
+                    console.log(err)
                 } else {
                     return;
                 }
