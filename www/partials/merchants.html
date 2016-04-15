@@ -1,1 +1,13 @@
-<h1>Hello,you've logged in</h1>
+<div class="bar bar-header bar-balanced">
+    <h1 class="title">Merchant List</h1>
+</div>
+<br><br>
+<ul class="list">
+    <div ng-repeat="merchant in merchants">
+        <div ng-click="getCatalog(merchant._id)">
+            <li class="item">
+              {{merchant.username}}
+            </li>
+        </div>
+    </div>
+</ul>

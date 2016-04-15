@@ -1,4 +1,4 @@
-angular.module('cloudShopper', ['ionic','ngRoute','loginControllers'])
+angular.module('cloudShopper', ['ionic','ngRoute','ngCordova','loginControllers'])
 
 .config(['$routeProvider',function($routeProvider){
         $routeProvider.
