@@ -1,5 +1,5 @@
 var loginControllers = angular.module('loginControllers', []);
-
+var loggedin = 0;
 loginControllers
 .controller('LoginCtrl',['$scope','$http','$location','$window',function($scope,$http,$location, $window){
     $scope.username = "John Doe";
@@ -14,7 +14,9 @@ loginControllers
         }).success(function (data) {
             console.log(data);
             $window.localStorage.setItem('user', JSON.stringify(data.user));
+            loggedin = 1;
             $location.path('/merchants');
+
             })
         .error(function(data) {
             console.log(data);
@@ -24,8 +26,7 @@ loginControllers
 }]);
 
 loginControllers
-.controller('MerchantCtrl',['$scope','$http','$location','$window',function($scope,$http,$location, $window,$cordovaGeolocation){
-    console.log("Logged in");
+.controller('MerchantCtrl',function($scope, $ionicModal, $http, $location, $cordovaGeolocation) {
 
     $scope.getCatalog = function (id) {
       $location.path('/catalog/' + id);
@@ -33,11 +34,19 @@ loginControllers
 
     $scope.merchants = [{username: "Test", _id: "1"}];
     var getLoc = function() {
-      var arr = [77.038,28.609];
-      console.log(arr);
-      getMerchants({
-            coordinates: arr,
-            type: 'Point'
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation
+        .getCurrentPosition(posOptions)
+        .then(function (position) {
+
+          var lat  = position.coords.latitude
+          var long = position.coords.longitude
+          var arr = [lat,long];
+
+          console.log(arr);
+
+        }, function(err) {
+          console.log(err);
         });
 
     };
@@ -59,9 +68,14 @@ loginControllers
 
     };
 
-    getLoc();
+    if(loggedin == 0) {
+        $location.path('/login');
+    } else {
+        getLoc();
+    }
 
-}]);
+
+});
 
 
 loginControllers
