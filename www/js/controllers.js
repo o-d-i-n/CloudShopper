@@ -46,7 +46,7 @@ loginControllers
 
         $http({
         method: 'POST',
-        url: "http://localhost:3000/admin/listMerchant",
+        url: "http://localhost:3000/admin/listAllMerchant",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         data: {location: location}
         }).success(function (data) {
