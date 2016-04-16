@@ -32,7 +32,7 @@ loginControllers
       $location.path('/catalog/' + id);
     };
 
-    $scope.merchants = [{username: "Test", _id: "1"}];
+    $scope.merchants = [];
     var getLoc = function() {
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
@@ -42,7 +42,7 @@ loginControllers
           var lat  = position.coords.latitude
           var long = position.coords.longitude
           var arr = [lat,long];
-
+          getMerchants({type:'Point',coordinates:arr});
           console.log(arr);
 
         }, function(err) {
@@ -59,7 +59,10 @@ loginControllers
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         data: {location: location}
         }).success(function (data) {
-            console.log(data);
+
+
+            $scope.merchants = data.merchants;
+
             //$location.path('/merchants');
             })
         .error(function(data) {
@@ -68,19 +71,41 @@ loginControllers
 
     };
 
-    if(loggedin == 0) {
-        $location.path('/login');
-    } else {
-        getLoc();
-    }
 
+    getLoc();
 
 });
 
 
 loginControllers
-.controller('CatalogCtrl',['$scope','$http','$location','$window',function($scope,$http,$location, $window){
-    console.log("Logged in");
+.controller('CatalogCtrl',['$scope','$http','$location','$window','$routeParams',function($scope,$http,$location, $window,$routeParams){
+
+    $scope.products = [];
+    var user = JSON.parse($window.localStorage.getItem('user'));
+    var datas = {
+        gender: 'M',
+        occupation: "student",
+        age: 18,
+        season: 'summer',
+        merchantID:$routeParams.merchantID
+    };
+    //console.log(data);
+
+
+    $http({
+    method: 'POST',
+    url: "http://localhost:3000/recommendations",
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    data: datas
+    }).success(function (data) {
+        console.log(data);
+        $scope.products = data.finals;
+        })
+    .error(function(data) {
+        console.log(data);
+    });
+
+
 }]);
 
 
