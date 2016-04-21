@@ -15,10 +15,14 @@ var router = express.Router();
 router.post('/getMerchants', auth.parseString, function (req, res) {
 
     Merchants.find({
-        location: {
-            $near: req.body.location.coordinates,
-            $maxDistance: 600, //metres
-        }
+        location:
+       { $near :
+          {
+            $geometry: { type: "Point",  coordinates: req.body.coordinates },
+            $minDistance: 1000,
+            $maxDistance: 5000
+          }
+       }
     }).limit(req.body.limit||30).exec(function (err, merchant) {
         if(err){
             return res.json({success:false, err: err});

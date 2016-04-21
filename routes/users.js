@@ -73,7 +73,7 @@ router.get('/login', function(req, res) {
     res.render('login');
 });
 
-router.post('/login', passport.authenticate('local'), function(req,res) {
+router.post('/login', auth.parseString,passport.authenticate('local'), function(req,res) {
         return res.json({success:true, user:req.user});
 });
 
