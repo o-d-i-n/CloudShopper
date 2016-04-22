@@ -110,6 +110,7 @@ loginControllers
 
 
 loginControllers
-.controller('ProductCtrl',['$scope','$http','$location','$window',function($scope,$http,$location, $window){
+.controller('ProductCtrl',['$scope','$http','$location','$window','$routeParams',function($scope,$http,$location, $window,$routeParams){
+    console.log($routeParams.productID);
     console.log("Logged in");
 }]);

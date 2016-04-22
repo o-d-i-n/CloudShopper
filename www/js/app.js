@@ -15,7 +15,7 @@ angular.module('cloudShopper', ['ionic','loginControllers','ngRoute','ngCordova'
             controller: 'CatalogCtrl'
         }).
         when('/product/:productID',{
-            templateUrl: 'partials/merchants.html',
+            templateUrl: 'partials/product.html',
             controller: 'ProductCtrl'
         }).
         otherwise({
