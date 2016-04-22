@@ -1,0 +1,44 @@
+<div class="bar bar-header bar-light">
+  <h1 class="title">Update Profile</h1>
+</div>
+<br><br>
+
+<div class="list">
+  <h1>
+    {{user.username}}
+  </h1>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">First Name</span>
+    <input type="text" name="firstName" ng-model="firstName">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Last Name</span>
+    <input type="text" name="lastName" ng-model="lastName">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Gender</span>
+    <input type="text" name="gender" ng-model="gender">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Occupation</span>
+    <input type="text" name="occupation" ng-model="occupation">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Age</span>
+    <input type="text" name="age" ng-model="age">
+  </label>
+</div>
+
+<button class="button button-full button-positive" ng-click="update(
+  {accountID: user._id,
+  firstName: firstName,
+  lastName: lastName,
+  gender: gender,
+  age: age,
+  occupation: occupation,
+  phoneNo: '',
+  photo: '',
+  email: ''
+  })">
+  Submit
+</button>

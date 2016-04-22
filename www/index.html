@@ -1,23 +1,38 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html ng-app="cloudShopper">
+=======
+<html ng-csp ng-app="login">
+>>>>>>> 18e1412aefdbd92139780117bf587daf6afe33ed
   <head>
     <meta charset="utf-8">
     <title>CloudShopper</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' yourhost.com ws://localhost:35729 * data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *;script-src 'self' localhost:35729 'unsafe-eval' 'unsafe-inline';"><link href="lib/ionic/css/ionic.css" rel="stylesheet">
 
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="lib/ionic/js/angular-route.js"></script>
+<<<<<<< HEAD
     <!-- Needed for Cordova/PhoneGap (will be a 404 during development) -->
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+=======
+
+    <!-- Needed for Cordova/PhoneGap (will be a 404 during development) -->
+>>>>>>> 18e1412aefdbd92139780117bf587daf6afe33ed
     <script src="js/controllers.js"></script>
     <script src="js/app.js"></script>
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="lib/angular-local-storage/dist/angular-local-storage.js"></script>
     <script src="cordova.js"></script>
   </head>
   <body>
+<<<<<<< HEAD
       <div ng-view>
       </div>
 
+=======
+    <div ng-view>
+    </div>
+>>>>>>> 18e1412aefdbd92139780117bf587daf6afe33ed
   </body>
 </html>
