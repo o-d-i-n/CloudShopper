@@ -1,0 +1,30 @@
+extends layout
+
+block meta
+    title= 'Login - Cloud Shopper'
+
+block content
+    .container
+        .card.row
+            .col.s10.offset-s1.center-on-small-only
+                form.row(role='form', action="/login", method="post")
+                    h3.intro Login
+                    .row
+                        .input-field.col.s8.offset-s2.m8
+                            input(type='text', id="username" name="username")
+                            label(for="username") Username
+                    .row
+                        div.input-field.col.s8.offset-s2.m8
+                            input(type='password', id="password" name="password")
+                            label(for="password") Password
+                            input(id="endpoint" type="hidden" name="endpoint" value="")
+                    .row.zero
+                        button.btn.waves-effect.waves-light(type='submit') Submit
+                form.row(role='form', action="/login/fb", method="get")
+                .row
+                    .col.s12
+                        a(href='/register')
+                            button.btn.waves-effect.waves-light(style="width: 200px; margin-left:-12px;") Register
+block style
+    style
+        include ../public/stylesheets/pages/about.css
